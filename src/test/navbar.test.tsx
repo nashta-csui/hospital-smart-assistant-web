@@ -32,4 +32,9 @@ describe('Navbar', () => {
     render(<Navbar />)
     expect(screen.getByRole('link', { name: /profil/i })).toBeInTheDocument()
   })
+
+  it('harus menerima className tambahan', () => {
+    render(<Navbar className="test-class" />)
+    expect(screen.getByRole('navigation')).toHaveClass('test-class')
+  })
 })
