@@ -1,5 +1,5 @@
-import { FAQAccordion } from './FAQAccordion'
-import { faqItems } from './faq-data'
+import { FAQAccordion } from '@/features/home/FAQAccordion'
+import { faqItems } from '@/features/home/faq-data'
 
 export default function HomePage() {
   return (
