@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import type { ChatbotService, Message } from './types'
 
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+  return crypto.randomUUID()
 }
 
 export function useChatbot(service: ChatbotService) {
