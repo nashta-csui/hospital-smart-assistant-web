@@ -3,8 +3,10 @@ import { describe, it, expect } from 'vitest'
 import App from './App'
 
 describe('App', () => {
-  it('should display Hello', () => {
+  it('should display FAQ', () => {
     render(<App />)
-    expect(screen.getByText('Hello')).toBeInTheDocument()
+
+    const faqElement = screen.getByText("Pertanyaan yang Sering Diajukan")
+    expect(faqElement).toBeInTheDocument()
   })
 })
