@@ -1,12 +1,50 @@
+import { useCallback, useState } from 'react'
 import type { ChatbotService, Message } from './types'
 
-export function useChatbot(service: ChatbotService) {
-  const messages: Message[] = []
+function generateId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+}
 
-  return {
-    messages,
-    isLoading: false,
-    error: null as string | null,
-    sendMessage: (_content: string) => {},
-  }
+export function useChatbot(service: ChatbotService) {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const sendMessage = useCallback(
+    async (content: string) => {
+      const trimmed = content.trim()
+      if (!trimmed) return
+
+      const userMessage: Message = {
+        id: generateId(),
+        role: 'user',
+        content: trimmed,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, userMessage])
+      setIsLoading(true)
+      setError(null)
+
+      try {
+        const reply = await service.sendMessage(trimmed)
+        const botMessage: Message = {
+          id: generateId(),
+          role: 'bot',
+          content: reply,
+          timestamp: new Date(),
+        }
+        setMessages((prev) => [...prev, botMessage])
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : 'An unexpected error occurred.'
+        setError(message)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [service]
+  )
+
+  return { messages, isLoading, error, sendMessage }
 }
